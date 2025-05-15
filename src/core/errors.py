@@ -1,12 +1,12 @@
 """
-Содержит обработку ошибок приложения
+Содержит обработку ошибок приложения.
 """
 
 from typing import Any
 
 from blacksheep import Request, Response
 from blacksheep.server import Application
-from blacksheep.server.responses import text
+from blacksheep.server.responses import json
 from essentials.exceptions import (
     AcceptedException,
     ForbiddenException,
@@ -20,19 +20,19 @@ def configure_error_handlers(app: Application) -> None:
     async def not_found_handler(
         app: Application, request: Request, exception: Exception
     ) -> Response:
-        return text(str(exception) or "Not found", 404)
+        return json({"error": "NotFound"}, status=404)
 
     async def not_implemented(*args: Any) -> Response:
-        return text("Not implemented", status=500)
+        return json({"error": "NotImplemented"}, status=500)
 
     async def unauthorized(*args: Any) -> Response:
-        return text("Unauthorized", status=401)
+        return json({"error": "Unauthorized"}, status=401)
 
     async def forbidden(*args: Any) -> Response:
-        return text("Forbidden", status=403)
+        return json({"error": "Forbidden"}, status=403)
 
     async def accepted(*args: Any) -> Response:
-        return text("Accepted", status=202)
+        return json({"error": "Accepted"}, status=202)
 
     app.exceptions_handlers.update(
         {

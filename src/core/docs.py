@@ -2,20 +2,27 @@
 Содержит генерацию документации в сваггере.
 """
 
-from dataclasses import dataclass
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 from blacksheep import Application
 from blacksheep.server.openapi.v3 import OpenAPIHandler
 from openapidocs.v3 import Info, MediaType, Parameter, ParameterLocation, Response, Schema
+from pydantic import BaseModel
 
 from app.billiard.binders import BilliardClubFilterBinder
 from core.binders import PaginationBinder
 from settings import settings
 
 
-@dataclass
-class ErrorInfo:
+R = TypeVar("R")
+
+
+class SuccessResponse(BaseModel, Generic[R]):
+    success: bool = True
+    result: R
+
+
+class ErrorInfo(BaseModel):
     error: str
     detail: dict[str, Any]
 
@@ -42,7 +49,19 @@ def configure_open_api(app: Application) -> None:
             content={
                 "application/json": MediaType(schema=Schema(type="object", any_of=[error_info]))
             },
-        )
+        ),
+        401: Response(
+            "Unauthorized",
+            content={
+                "application/json": MediaType(schema=Schema(type="object", any_of=[error_info]))
+            },
+        ),
+        403: Response(
+            "Forbidden",
+            content={
+                "application/json": MediaType(schema=Schema(type="object", any_of=[error_info]))
+            },
+        ),
     }
 
     open_api.set_binder_docs(
