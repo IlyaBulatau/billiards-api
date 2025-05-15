@@ -1,0 +1,14 @@
+.vscode
+venv
+.env
+env
+.github/
+**/*.pyc
+**/*.md
+**/__pycache__
+src/.dockerignore
+src/Dockerfile
+src/.env*
+.venv
+.mypy*
+./.git*
