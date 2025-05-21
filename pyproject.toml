@@ -5,14 +5,19 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12.9"
 dependencies = [
+    "aioboto3>=14.3.0",
     "alembic>=1.15.2",
+    "alembic-postgresql-enum>=1.7.0",
     "asyncpg>=0.30.0",
     "blacksheep>=2.3.0",
     "blacksheep-cli>=0.0.5",
     "essentials-configuration[full]>=2.0.4",
+    "fire>=0.7.0",
     "markupsafe>=3.0.2",
+    "phonenumbers>=9.0.5",
     "pydantic>=2.11.4",
     "sqlalchemy>=2.0.40",
+    "sqlalchemy-utils>=0.41.2",
     "uvicorn>=0.34.2",
     "uvloop>=0.21.0",
 ]
@@ -21,6 +26,7 @@ dependencies = [
 dev = [
     "mypy>=1.15.0",
     "ruff>=0.11.9",
+    "types-aioboto3>=14.3.0",
 ]
 
 [tool.ruff]
@@ -90,3 +96,5 @@ mypy_path = "src/"
 exclude = [
     "migrations"
 ]
+plugins = "sqlalchemy.ext.mypy.plugin"
+

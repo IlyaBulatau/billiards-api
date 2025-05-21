@@ -15,7 +15,7 @@ def configure_application(settings: Settings) -> Application:
         show_error_details=settings.show_error_details,
     )
 
-    configure_di(app, settings)
+    configure_di(app.services, settings)  # type: ignore
     configure_error_handlers(app)
     configure_controllers(app)
     configure_open_api(app)
@@ -31,3 +31,11 @@ def get_app() -> Application:
 
 
 app = get_app()
+
+
+from blacksheep import get
+
+
+@get("/")
+def home():
+    return f"Hello, World!"

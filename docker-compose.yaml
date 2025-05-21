@@ -16,6 +16,21 @@ services:
       db:
         condition: service_healthy
 
+  storage:
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z.fips
+    container_name: storage
+    env_file:
+      - ./src/.env
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: ${APP_S3__ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${APP_S3__SECRET_KEY}
+    command: server --console-address ":9001" /data
+
   db:
     image: postgres:16-bullseye
     container_name: db
@@ -32,5 +47,22 @@ services:
       retries: 3
       start_period: 5s
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres_data:
+  minio_storage:
+  pgadmin_data:

@@ -8,6 +8,13 @@ from pydantic import BaseModel
 ENV_VAR_PREFIX = "APP_"
 
 
+class S3Storage(BaseModel):
+    access_key: str
+    secret_key: str
+    endpoint: str
+    bucket: str
+
+
 class Database(BaseModel):
     host: str
     port: int
@@ -15,7 +22,7 @@ class Database(BaseModel):
     password: str
     name: str
     overflow: int = 100
-    pool_zie: int = 30
+    pool_size: int = 30
     pool_timeout: int = 30
     echo: bool = True
 
@@ -32,6 +39,7 @@ class Settings(BaseModel):
     api_default_page_size: int = 100
     api_max_page_size: int = 1000
     database: Database
+    s3: S3Storage
 
 
 def default_configuration_builder() -> ConfigurationBuilder:

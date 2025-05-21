@@ -33,6 +33,7 @@ FROM builder as development
 
 WORKDIR /opt/app
 
-RUN uv sync --group dev
+RUN bash -c "uv pip install --group dev --system -r <(uv pip compile pyproject.toml)"
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
