@@ -31,11 +31,3 @@ def get_app() -> Application:
 
 
 app = get_app()
-
-
-from blacksheep import get
-
-
-@get("/")
-def home():
-    return f"Hello, World!"
