@@ -7,10 +7,9 @@ from settings import Settings
 
 
 class IS3Storage(IStorage):
-    settings: Settings
-
-    def __init__(self, s3_session: Session) -> None:
+    def __init__(self, s3_session: Session, settings: Settings) -> None:
         self._s3_session = s3_session
+        self._settings = settings
 
     @abstractmethod
-    async def get_url(self, path: str, expiration: int) -> str: ...
+    async def get_url(self, path: str, expiration: int = 3600) -> str: ...
