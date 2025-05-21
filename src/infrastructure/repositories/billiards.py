@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from core.filters.filter_model import FilterModel
 from core.filters.sqlalchemy import orm_filter
@@ -12,7 +13,11 @@ class BilliarClubRepository(IBilliardClubRepository):
         self, filters: FilterModel[BilliardClub], pagination: Pagination
     ) -> list[BilliardClub]:
         stmt = orm_filter(
-            filters, select(BilliardClub).limit(pagination.limit).offset(pagination.offset)
+            filters,
+            select(BilliardClub)
+            .limit(pagination.limit)
+            .offset(pagination.offset)
+            .options(joinedload(BilliardClub.address)),
         )
         result = await self._async_session.execute(stmt)
 
