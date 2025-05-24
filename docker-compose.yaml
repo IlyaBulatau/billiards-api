@@ -34,6 +34,7 @@ services:
   db:
     image: postgres:16-bullseye
     container_name: db
+    command: -c 'max_connections=${APP_DATABASE__OVERFLOW:-100}'
     environment:
       - POSTGRES_DB=${APP_DATABASE__NAME}
       - POSTGRES_USER=${APP_DATABASE__USER}

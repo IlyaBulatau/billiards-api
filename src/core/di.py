@@ -35,8 +35,8 @@ def configure_di(container: Container, settings: Settings) -> None:
     container.add_transient(IBilliardTableRepository, BilliarTableRepository)
 
     # s3 storage
-    container.add_scoped_by_factory(get_s3_session, Session)
-    container.add_transient(IS3Storage, S3Storage)
+    container.add_singleton_by_factory(get_s3_session, Session)
+    container.add_scoped(IS3Storage, S3Storage)
 
     # services
     container.add_transient(IBilliardClubService, BilliardClubService)

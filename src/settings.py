@@ -21,9 +21,9 @@ class Database(BaseModel):
     user: str
     password: str
     name: str
-    overflow: int = 100
-    pool_size: int = 30
-    pool_timeout: int = 30
+    overflow: int = 100  # Максимальное количество одновременных сессий
+    pool_size: int = 30  # Количество постоянных сессий
+    pool_timeout: int = 10  # время ожидания получения сессии из пула
     echo: bool = True
 
     @cached_property
