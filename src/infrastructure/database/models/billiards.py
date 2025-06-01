@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import uuid
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, Numeric, String
 from sqlalchemy.dialects.postgresql import ENUM as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_utils import EmailType, PhoneNumberType
@@ -12,6 +12,7 @@ from infrastructure.database.models.base import Base
 
 if TYPE_CHECKING:
     from infrastructure.database.models.addresses import Address
+    from infrastructure.database.models.bookings import BookingTable
     from infrastructure.database.models.schedules import ClubSchedule
 
 
@@ -44,5 +45,9 @@ class BilliardTable(Base):
         ForeignKey("billiard_clubs.id"), nullable=False
     )
     table_type: Mapped[TableType] = mapped_column(PgEnum(TableType), nullable=False)
+    price_per_hour: Mapped[Numeric] = mapped_column(
+        Numeric(precision=5, scale=2, decimal_return_scale=2), nullable=True
+    )
 
     billibard_club: Mapped[BilliardClub] = relationship(back_populates="billiard_tables")
+    bookings: Mapped[list["BookingTable"]] = relationship(back_populates="billiard_table")

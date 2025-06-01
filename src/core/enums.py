@@ -15,3 +15,10 @@ class DayOfWeek(Enum):
     FRIDAY = "Пятница"
     SATURDAY = "Суббота"
     SUNDAY = "Воскресенье"
+
+
+class BookingStatus(Enum):
+    PENDING = "Ожидание"
+    CONFIRMED = "Подтверждено"
+    CANCALLED = " Отменено"
+    COMPLETED = "Завершено"
