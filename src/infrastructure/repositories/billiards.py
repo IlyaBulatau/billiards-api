@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 
 from core.filters.filter_model import FilterModel
 from core.filters.sqlalchemy import orm_filter
@@ -17,7 +17,7 @@ class BilliarClubRepository(IBilliardClubRepository):
             select(BilliardClub)
             .limit(pagination.limit)
             .offset(pagination.offset)
-            .options(joinedload(BilliardClub.address)),
+            .options(joinedload(BilliardClub.address), selectinload(BilliardClub.schedules)),
         )
         result = await self._async_session.execute(stmt)
 
