@@ -32,7 +32,7 @@ class BilliardClubService(IBilliardClubService[BilliardClub, BilliardClubFilter]
         if not billiard_club:
             raise ObjectNotFound()
 
-        if billiard_club.phone:
+        if billiard_club.photo:
             await self._prepare_photo_url(billiard_club)
 
         return BilliardClubDetailScheme.model_validate(billiard_club)
