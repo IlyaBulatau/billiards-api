@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from blacksheep import Response
 from blacksheep.server.controllers import get
 
@@ -32,3 +34,12 @@ class BilliardClubAPIController(APIController):
         billiard_clubs = await billiard_club_service.get_all(filters, pagination)
 
         return self.json(data=billiard_clubs)
+
+    @open_api(docs.get_billiard_club_detail)
+    @get("{billiard_club_id}")
+    async def get_billiard_club_detail(
+        self, billiard_club_id: UUID, billiard_club_service: IBilliardClubService
+    ) -> Response:
+        billiard_club = await billiard_club_service.get_detail(billiard_club_id)
+
+        return self.json(data=billiard_club)

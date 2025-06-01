@@ -1,12 +1,15 @@
-from datetime import time
+from datetime import datetime, time
+from decimal import Decimal
 from uuid import UUID
 
 from pydantic import BaseModel
 
-from core.enums import DayOfWeek
+from core.enums import BookingStatus, DayOfWeek, TableType
 
 
 class BilliardClubAddressScheme(BaseModel):
+    """Адрес биллиардного клуба"""
+
     id: UUID
     city: str
     street: str
@@ -20,6 +23,8 @@ class BilliardClubAddressScheme(BaseModel):
 
 
 class BilliardClubScheduleScheme(BaseModel):
+    """Расписание биллиардного клуба"""
+
     day_of_week: DayOfWeek
     opening_time: time
     closing_time: time
@@ -31,6 +36,8 @@ class BilliardClubScheduleScheme(BaseModel):
 
 
 class BilliardClubAllItemScheme(BaseModel):
+    """Бильярдный клуб в списке"""
+
     id: UUID
     name: str
     phone: str | None
@@ -38,6 +45,40 @@ class BilliardClubAllItemScheme(BaseModel):
     photo: str | None
     address: BilliardClubAddressScheme | None
     schedules: list[BilliardClubScheduleScheme]
+
+    class Config:
+        from_attributes = True
+
+
+class BilliardTableBookingScheme(BaseModel):
+    """Бронь стола"""
+
+    id: UUID
+    start_time: datetime
+    end_time: datetime
+    status: BookingStatus
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class BilliardClubTableScheme(BaseModel):
+    """Биллиардный стол клуба"""
+
+    id: UUID
+    table_type: TableType
+    price_per_hour: Decimal
+    bookings: list[BilliardTableBookingScheme]
+
+    class Config:
+        from_attributes = True
+
+
+class BilliardClubDetailScheme(BilliardClubAllItemScheme):
+    """Бильярдный клуб детально"""
+
+    billiard_tables: list[BilliardClubTableScheme]
 
     class Config:
         from_attributes = True

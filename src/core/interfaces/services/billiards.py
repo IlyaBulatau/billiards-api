@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Generic, Sequence, TypeVar
+from typing import Generic, NoReturn, Sequence, TypeVar
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -19,3 +20,6 @@ class IBilliardClubService(ABC, Generic[T, F]):
 
     @abstractmethod
     async def get_all(self, filters: F, paginaton: Pagination) -> Sequence[BaseModel]: ...
+
+    @abstractmethod
+    async def get_detail(self, billiard_club_id: UUID) -> BaseModel | NoReturn: ...

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -5,7 +7,7 @@ from core.filters.filter_model import FilterModel
 from core.filters.sqlalchemy import orm_filter
 from core.interfaces.repositories import IBilliardClubRepository, IBilliardTableRepository
 from core.schemes.paginations import Pagination
-from infrastructure.database.models import BilliardClub
+from infrastructure.database.models import BilliardClub, BilliardTable
 
 
 class BilliarClubRepository(IBilliardClubRepository):
@@ -22,6 +24,21 @@ class BilliarClubRepository(IBilliardClubRepository):
         result = await self._async_session.execute(stmt)
 
         return result.scalars().all()
+
+    async def get_by_id(self, billiard_club_id: UUID) -> BilliardClub | None:
+        stmt = (
+            select(BilliardClub)
+            .where(BilliardClub.id == billiard_club_id)
+            .options(
+                joinedload(BilliardClub.address),
+                selectinload(BilliardClub.schedules),
+                selectinload(BilliardClub.billiard_tables).selectinload(BilliardTable.bookings),
+            )
+        )
+
+        result = await self._async_session.execute(stmt)
+
+        return result.scalar_one_or_none()
 
     async def create(self, instance: BilliardClub) -> BilliardClub: ...
 
