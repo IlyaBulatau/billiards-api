@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from core.interfaces.repositories.billiards import IBilliardTableRepository
 from core.interfaces.repositories.bookings import IBookingTableRepository
+from core.validators.bookngs import BookingTableIsFreeValidator
 
 
 T = TypeVar("T")
@@ -19,9 +20,11 @@ class IReservationTableCommand(ABC, Generic[T]):
         self,
         booking_table_repository: IBookingTableRepository,
         billiard_table_repository: IBilliardTableRepository,
+        booking_table_is_free_validator: BookingTableIsFreeValidator,
     ):
         self._booking_table_repository = booking_table_repository
         self._billiard_table_repository = billiard_table_repository
+        self._booking_table_is_free_validator = booking_table_is_free_validator
 
     @abstractmethod
     async def execute(
@@ -34,9 +37,3 @@ class IReservationTableCommand(ABC, Generic[T]):
         времени работы клуба; соблюдение максимального и минимального времени бронирования;
         минимальное время бронирования до начала брони.
         """
-
-    @abstractmethod
-    async def _validation_booking_table(
-        self, billiard_table_id: UUID, start_time: datetime, end_time: datetime
-    ) -> None:
-        """Проверка на возможность забронировать стол"""

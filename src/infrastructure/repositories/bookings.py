@@ -43,4 +43,4 @@ class BookingTableRepository(IBookingTableRepository):
 
         result = await self._async_session.execute(stmt)
 
-        return result.scalar_one_or_none()
+        return result.scalar()

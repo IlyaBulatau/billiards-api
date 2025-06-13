@@ -14,7 +14,7 @@ F = TypeVar("F")
 
 
 class IBilliardClubListQuery(ABC, Generic[T, F]):
-    """Получение списка билльярдных клубов"""
+    """Получение списка бильярдных клубов"""
 
     def __init__(self, billiard_club_repository: IBilliardClubRepository, s3_storage: IS3Storage):
         self._billiard_club_repository = billiard_club_repository
@@ -25,7 +25,7 @@ class IBilliardClubListQuery(ABC, Generic[T, F]):
 
 
 class IBilliardClubDetailQuery(ABC, Generic[T]):
-    """Получение данных билльярдного клуба по ID"""
+    """Получение данных бильярдного клуба по ID"""
 
     def __init__(self, billiard_club_repository: IBilliardClubRepository, s3_storage: IS3Storage):
         self._billiard_club_repository = billiard_club_repository
