@@ -5,8 +5,12 @@ from infrastructure.database.models import BilliardClub, BilliardTable
 
 
 class IBilliardClubRepository(IRepository[BilliardClub]):
-    async def get_by_id(self, billiard_club_id: UUID) -> BilliardClub | None: ...
+    async def get_by_id(self, billiard_club_id: UUID) -> BilliardClub | None:
+        """Получить бильярдный клуб по ID"""
 
 
 class IBilliardTableRepository(IRepository[BilliardTable]):
-    pass
+    async def get_by_id_with_club_and_schedules(
+        self, billiard_table_id: UUID
+    ) -> BilliardTable | None:
+        """Получить бильярдный стол с данными клуба и расписанием"""

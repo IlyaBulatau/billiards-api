@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 import uuid
 
-from sqlalchemy import ForeignKey, Numeric, String
+from sqlalchemy import Boolean, ForeignKey, Numeric, String
 from sqlalchemy.dialects.postgresql import ENUM as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import expression
 from sqlalchemy_utils import EmailType, PhoneNumberType
 
 from core.enums import TableType
@@ -44,9 +45,18 @@ class BilliardTable(Base):
     billiard_club_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("billiard_clubs.id"), nullable=False
     )
-    table_type: Mapped[TableType] = mapped_column(PgEnum(TableType), nullable=False)
+    table_type: Mapped[TableType] = mapped_column(
+        PgEnum(TableType), nullable=False, comment="Тип стола"
+    )
     price_per_hour: Mapped[Numeric] = mapped_column(
-        Numeric(precision=5, scale=2, decimal_return_scale=2), nullable=True
+        Numeric(precision=5, scale=2, decimal_return_scale=2), nullable=True, comment="Цена в час"
+    )
+    in_service: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        server_default=expression.false(),
+        nullable=False,
+        comment="Находится ли стол в техническом обслуживании",
     )
 
     billibard_club: Mapped[BilliardClub] = relationship(back_populates="billiard_tables")

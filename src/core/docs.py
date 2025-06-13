@@ -85,5 +85,6 @@ def configure_open_api(app: Application) -> None:
         BilliardClubFilterBinder,
         [
             Parameter("name", ParameterLocation.QUERY, required=False),
+            Parameter("name__ilike", ParameterLocation.QUERY, required=False),
         ],
     )

@@ -21,9 +21,11 @@ class ClubSchedule(Base):
         ForeignKey("billiard_clubs.id"), nullable=False
     )
     day_of_week: Mapped[DayOfWeek] = mapped_column(PgEnum(DayOfWeek), nullable=False)
-    opening_time: Mapped[Time] = mapped_column(Time, nullable=False)
-    closing_time: Mapped[Time] = mapped_column(Time, nullable=False)
-    is_overnight: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    opening_time: Mapped[Time] = mapped_column(Time(timezone=True), nullable=False)
+    closing_time: Mapped[Time] = mapped_column(Time(timezone=True), nullable=False)
+    is_overnight: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, comment="Затрагивает ли время работы 2 дня"
+    )
     is_closed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     billiard_club: Mapped[BilliardClub] = relationship(

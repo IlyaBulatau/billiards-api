@@ -2,23 +2,29 @@ from enum import Enum
 
 
 class TableType(Enum):
-    SNOOKER = "Снукер"
-    POOL = "Пул"
-    RUSSIAN = "Русский"
+    SNOOKER = "SNOOKER"
+    POOL = "POOL"
+    RUSSIAN = "RUSSIAN"
 
 
 class DayOfWeek(Enum):
-    MONDAY = "Понедельник"
-    TUESDAY = "Вторник"
-    WEDNESDAY = "Среда"
-    THURSDAY = "Четверг"
-    FRIDAY = "Пятница"
-    SATURDAY = "Суббота"
-    SUNDAY = "Воскресенье"
+    MONDAY = "MONDAY"
+    TUESDAY = "TUESDAY"
+    WEDNESDAY = "WEDNESDAY"
+    THURSDAY = "THURSDAY"
+    FRIDAY = "FRIDAY"
+    SATURDAY = "SATURDAY"
+    SUNDAY = "SUNDAY"
 
 
 class BookingStatus(Enum):
-    PENDING = "Ожидание"
-    CONFIRMED = "Подтверждено"
-    CANCALLED = " Отменено"
-    COMPLETED = "Завершено"
+    PENDING = "PENDING"
+    CONFIRMED = "CONFIRMED"
+    CANCALLED = " CANCALLED"
+    COMPLETED = "COMPLETED"
+
+
+def get_day_of_week_by_int(day: int) -> str:
+    """Получить название дня недели в соответствии с номером недели, 0 - MONDAY, 6 - SUNDAY"""
+
+    return DayOfWeek._member_names_[day]

@@ -7,7 +7,7 @@ from core.filters.filter_model import FilterModel
 from core.filters.sqlalchemy import orm_filter
 from core.interfaces.repositories import IBilliardClubRepository, IBilliardTableRepository
 from core.schemes.paginations import Pagination
-from infrastructure.database.models import BilliardClub, BilliardTable
+from infrastructure.database.models import BilliardClub, BilliardTable, ClubSchedule
 
 
 class BilliarClubRepository(IBilliardClubRepository):
@@ -55,3 +55,16 @@ class BilliarTableRepository(IBilliardTableRepository):
     async def update(self): ...
 
     async def delete(self): ...
+
+    async def get_by_id_with_club_and_schedules(
+        self, billiard_table_id: UUID
+    ) -> BilliardTable | None:
+        stmt = (
+            select(BilliardTable)
+            .where(BilliardTable.id == billiard_table_id)
+            .options(joinedload(BilliardTable.billibard_club).selectinload(BilliardClub.schedules))
+        )
+
+        result = await self._async_session.execute(stmt)
+
+        return result.scalar_one_or_none()

@@ -15,6 +15,8 @@ from essentials.exceptions import (
     UnauthorizedException,
 )
 
+from core.exceptions.base import BadRequestError
+
 
 def configure_error_handlers(app: Application) -> None:
     async def not_found_handler(
@@ -34,6 +36,11 @@ def configure_error_handlers(app: Application) -> None:
     async def accepted(*args: Any) -> Response:
         return json({"error": "Accepted"}, status=202)
 
+    async def bad_request(
+        app: Application, request: Request, exception: BadRequestError
+    ) -> Response:
+        return json({"error": exception.__class__.__name__, "detail": exception.msg}, status=400)
+
     app.exceptions_handlers.update(
         {
             ObjectNotFound: not_found_handler,
@@ -41,5 +48,6 @@ def configure_error_handlers(app: Application) -> None:
             UnauthorizedException: unauthorized,
             ForbiddenException: forbidden,
             AcceptedException: accepted,
+            BadRequestError: bad_request,
         }
     )
