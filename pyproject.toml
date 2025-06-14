@@ -17,6 +17,7 @@ dependencies = [
     "phonenumbers>=9.0.5",
     "pydantic>=2.11.4",
     "pydantic-extra-types>=2.10.5",
+    "pytz>=2025.2",
     "sqlalchemy>=2.0.40",
     "sqlalchemy-utils>=0.41.2",
     "uvicorn>=0.34.2",

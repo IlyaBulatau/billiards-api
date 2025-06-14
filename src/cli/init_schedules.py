@@ -1,5 +1,4 @@
 from datetime import time
-import logging
 
 import fire
 
@@ -14,9 +13,6 @@ from infrastructure.database.models.schedules import ClubSchedule
 from infrastructure.repositories.billiards import BilliarClubRepository
 from infrastructure.repositories.schedules import ClubScheduleRepository
 from settings import settings
-
-
-logger = logging.getLogger()
 
 
 async def init_schedules() -> None:

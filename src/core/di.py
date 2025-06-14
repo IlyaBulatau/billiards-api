@@ -18,6 +18,7 @@ from core.interfaces.repositories import (
 )
 from core.interfaces.storages.s3 import IS3Storage
 from core.validators.bookngs import BookingTableIsFreeValidator
+from core.validators.club_schedules import ClubScheduleAvailableValidator
 from infrastructure.database.connections import (
     get_async_engine,
     get_async_session,
@@ -49,6 +50,7 @@ def configure_di(container: Container, settings: Settings) -> None:
 
     # validators
     container.register(BookingTableIsFreeValidator)
+    container.register(ClubScheduleAvailableValidator)
 
     # s3 storage
     container.add_singleton_by_factory(get_s3_session, Session)
@@ -77,6 +79,7 @@ def configure_di(container: Container, settings: Settings) -> None:
             "billiard_club_detail_query": IBilliardClubDetailQuery,
             "reservation_command": IReservationTableCommand,
             "booking_table_is_free_validator": BookingTableIsFreeValidator,
+            "club_schedule_available_validator": ClubScheduleAvailableValidator,
         },
         override=True,
     )

@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from core.interfaces.repositories.billiards import IBilliardTableRepository
 from core.interfaces.repositories.bookings import IBookingTableRepository
 from core.validators.bookngs import BookingTableIsFreeValidator
+from core.validators.club_schedules import ClubScheduleAvailableValidator
 
 
 T = TypeVar("T")
@@ -21,10 +22,12 @@ class IReservationTableCommand(ABC, Generic[T]):
         booking_table_repository: IBookingTableRepository,
         billiard_table_repository: IBilliardTableRepository,
         booking_table_is_free_validator: BookingTableIsFreeValidator,
+        club_schedule_available_validator: ClubScheduleAvailableValidator,
     ):
         self._booking_table_repository = booking_table_repository
         self._billiard_table_repository = billiard_table_repository
         self._booking_table_is_free_validator = booking_table_is_free_validator
+        self._club_schedule_available_validator = club_schedule_available_validator
 
     @abstractmethod
     async def execute(

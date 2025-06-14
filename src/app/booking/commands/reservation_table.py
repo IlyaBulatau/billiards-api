@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 from uuid import UUID
 
@@ -19,9 +20,23 @@ class ReservationTableCommand(IReservationTableCommand[BilliardClub]):
         if not billiard_table:
             raise BilliardTableNotExistsError
 
-        await self._booking_table_is_free_validator.validate(
-            billiard_table_id, start_time, end_time
-        )
+        validate_tasks = [
+            asyncio.create_task(
+                self._booking_table_is_free_validator.validate(
+                    billiard_table_id, start_time, end_time
+                )
+            ),
+            asyncio.create_task(
+                self._club_schedule_available_validator.validate(
+                    billiard_table.billibard_club, start_time
+                )
+            ),
+        ]
+
+        done, _ = await asyncio.wait(validate_tasks, return_when=asyncio.FIRST_EXCEPTION)
+
+        for future in done:
+            await future
 
         instance = BookingTable(
             billiard_table_id=billiard_table_id,

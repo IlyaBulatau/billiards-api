@@ -7,7 +7,7 @@ from core.filters.filter_model import FilterModel
 from core.filters.sqlalchemy import orm_filter
 from core.interfaces.repositories import IBilliardClubRepository, IBilliardTableRepository
 from core.schemes.paginations import Pagination
-from infrastructure.database.models import BilliardClub, BilliardTable, ClubSchedule
+from infrastructure.database.models import BilliardClub, BilliardTable
 
 
 class BilliarClubRepository(IBilliardClubRepository):
