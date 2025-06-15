@@ -34,11 +34,12 @@ services:
   db:
     image: postgres:16-bullseye
     container_name: db
-    command: -c 'max_connections=${APP_DATABASE__OVERFLOW:-100}'
+    command: -c 'max_connections=${APP_DATABASE__OVERFLOW:-100}' -c 'timezone=${APP_DATABASE__TZ:-Europe/Moscow}'
     environment:
       - POSTGRES_DB=${APP_DATABASE__NAME}
       - POSTGRES_USER=${APP_DATABASE__USER}
       - POSTGRES_PASSWORD=${APP_DATABASE__PASSWORD}
+      - TZ=${APP_DATABASE__TZ:-Europe/Moscow}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
