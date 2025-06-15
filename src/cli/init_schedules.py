@@ -12,7 +12,7 @@ from infrastructure.database.connections import (
 from infrastructure.database.models.schedules import ClubSchedule
 from infrastructure.repositories.billiards import BilliarClubRepository
 from infrastructure.repositories.schedules import ClubScheduleRepository
-from settings import settings
+from settings import TIMEZONE, settings
 
 
 async def init_schedules() -> None:
@@ -34,8 +34,8 @@ async def init_schedules() -> None:
                 club_schedule = ClubSchedule(
                     billiard_club_id=billiard_club.id,
                     day_of_week=day,
-                    opening_time=time(hour=9),
-                    closing_time=time(hour=21),
+                    opening_time=time(hour=9, tzinfo=TIMEZONE),
+                    closing_time=time(hour=21, tzinfo=TIMEZONE),
                 )
 
                 await club_schedule_repository.create(club_schedule)

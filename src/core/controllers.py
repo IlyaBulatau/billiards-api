@@ -4,10 +4,11 @@
 
 from blacksheep import Application
 
+from presentation.html.billiards.views import BilliardClubView
 from presentation.rest import BilliardClubAPIController, BookingController
 
 
-CONTROLLERS = [BilliardClubAPIController, BookingController]
+CONTROLLERS = [BilliardClubAPIController, BookingController, BilliardClubView]
 
 
 def configure_controllers(app: Application) -> None:

@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-8-ball me-2"></i>Billiard Clubs
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Клубы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Мои бронирования</a>
+                </li>
+                {# {% if current_user.is_authenticated and current_user.is_club_owner %} #}
+                {# <li class="nav-item"> #}
+                    {# <a class="nav-link" href="#"> #}
+                        {# <i class="fas fa-chart-line me-1"></i>Панель управления #}
+                    {# </a> #}
+                {# </li> #}
+                {# {% endif %} #}
+            </ul>
+            <ul class="navbar-nav">
+                {# {% if current_user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>{{ current_user.name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Профиль</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Выйти</a></li>
+                    </ul>
+                </li>
+                {% else %} #}
+                {# <li class="nav-item"> #}
+                    {# <a class="nav-link" href="#">Войти</a> #}
+                {# </li> #}
+                {# <li class="nav-item"> #}
+                    {# <a class="btn btn-outline-light" href="#">Регистрация</a> #}
+                {# </li> #}
+                {# {% endif %} #}
+            </ul>
+        </div>
+    </div>
+</nav>

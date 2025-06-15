@@ -1,14 +1,14 @@
+from datetime import timedelta, timezone
 from functools import cached_property
 
 from config.common import Configuration, ConfigurationBuilder
 from config.env import EnvVars
 from pydantic import BaseModel
-import pytz
 
 
 ENV_VAR_PREFIX = "APP_"
 
-TIMEZONE = pytz.timezone("Europe/Moscow")
+TIMEZONE = timezone(timedelta(hours=3))
 
 
 class S3Storage(BaseModel):

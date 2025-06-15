@@ -1,0 +1,48 @@
+{% extends "layout.jinja" %}
+{% from "partials/club_card.jinja" import club_card %}
+
+{% block title %}Главная | Billiard Clubs{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-light rounded-3 p-5 mb-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h1 class="display-4 fw-bold">Найдите идеальный бильярдный клуб</h1>
+            <p class="lead">Бронируйте столы онлайн, просматривайте меню и читайте отзывы</p>
+            <a href="/billiard-clubs" class="btn btn-primary btn-lg mt-3">
+                Найти клубы <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <img src="#" alt="Бильярдный стол"
+                class="img-fluid rounded shadow">
+        </div>
+    </div>
+</div>
+
+<div class="featured-clubs">
+    <h2 class="mb-4">Популярные клубы</h2>
+    <div class="row">
+        {% for club in billiard_clubs %}
+        <div class="col-md-4 mb-4">
+            {{ club_card(club) }}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block body_scripts %}
+<script>
+    // Инициализация popovers
+    document.addEventListener('DOMContentLoaded', function () {
+        const scheduleBadges = document.querySelectorAll('.schedule-badge');
+
+        scheduleBadges.forEach(badge => {
+            new bootstrap.Popover(badge, {
+                container: 'body',
+                customClass: 'schedule-popover'
+            });
+        });
+    });
+</script>
+{% endblock %}

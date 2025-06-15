@@ -18,7 +18,9 @@ class BilliardClubListQuery(IBilliardClubListQuery[BilliardClub, BilliardClubFil
         await asyncio.gather(*tasks)
 
         return [
-            BilliardClubAllItemScheme.model_validate(billiard_club)
+            BilliardClubAllItemScheme.model_validate(
+                billiard_club, context={"instance": billiard_club}
+            )
             for billiard_club in billiard_clubs
         ]
 

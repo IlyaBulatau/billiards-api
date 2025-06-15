@@ -33,7 +33,10 @@ class BilliardClub(Base):
 
     billiard_tables: Mapped[list["BilliardTable"]] = relationship(back_populates="billibard_club")
     schedules: Mapped[list["ClubSchedule"]] = relationship(
-        "ClubSchedule", back_populates="billiard_club", cascade="all, delete-orphan"
+        "ClubSchedule",
+        back_populates="billiard_club",
+        cascade="all, delete-orphan",
+        order_by="ClubSchedule.day_of_week",
     )
     address: Mapped["Address"] = relationship(back_populates="billiard_clubs")
 

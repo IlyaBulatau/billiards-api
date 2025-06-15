@@ -5,6 +5,7 @@ from core.controllers import configure_controllers
 from core.di import configure_di
 from core.docs import configure_open_api
 from core.errors import configure_error_handlers
+from core.templates.configure import configure_templating
 from settings import Settings, settings
 
 
@@ -19,6 +20,8 @@ def configure_application(settings: Settings) -> Application:
     configure_error_handlers(app)
     configure_controllers(app)
     configure_open_api(app)
+    configure_templating()
+    app.serve_files("static/templates")
 
     return app
 

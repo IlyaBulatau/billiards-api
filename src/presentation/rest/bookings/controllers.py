@@ -18,7 +18,7 @@ class BookingController(APIController):
 
     @classmethod
     def route(cls) -> str | None:
-        return "/bookings/"
+        return "/api/bookings/"
 
     @open_api(docs.do_booking_table)
     @post()
