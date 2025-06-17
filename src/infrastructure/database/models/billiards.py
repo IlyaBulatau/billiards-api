@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 import uuid
 
-from sqlalchemy import Boolean, ForeignKey, Numeric, String
+from sqlalchemy import Boolean, ForeignKey, Numeric, String, func, select
 from sqlalchemy.dialects.postgresql import ENUM as PgEnum
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import Mapped, column_property, mapped_column, relationship
 from sqlalchemy.sql import expression
 from sqlalchemy_utils import EmailType, PhoneNumberType
 
@@ -15,6 +16,31 @@ if TYPE_CHECKING:
     from infrastructure.database.models.addresses import Address
     from infrastructure.database.models.bookings import BookingTable
     from infrastructure.database.models.schedules import ClubSchedule
+
+
+class BilliardTable(Base):
+    __tablename__ = "billiard_tables"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    billiard_club_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("billiard_clubs.id"), nullable=False
+    )
+    table_type: Mapped[TableType] = mapped_column(
+        PgEnum(TableType), nullable=False, comment="Тип стола"
+    )
+    price_per_hour: Mapped[Numeric] = mapped_column(
+        Numeric(precision=5, scale=2, decimal_return_scale=2), nullable=True, comment="Цена в час"
+    )
+    in_service: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        server_default=expression.false(),
+        nullable=False,
+        comment="Находится ли стол в техническом обслуживании",
+    )
+
+    billibard_club: Mapped["BilliardClub"] = relationship(back_populates="billiard_tables")
+    bookings: Mapped[list["BookingTable"]] = relationship(back_populates="billiard_table")
 
 
 class BilliardClub(Base):
@@ -40,27 +66,54 @@ class BilliardClub(Base):
     )
     address: Mapped["Address"] = relationship(back_populates="billiard_clubs")
 
-
-class BilliardTable(Base):
-    __tablename__ = "billiard_tables"
-
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    billiard_club_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("billiard_clubs.id"), nullable=False
-    )
-    table_type: Mapped[TableType] = mapped_column(
-        PgEnum(TableType), nullable=False, comment="Тип стола"
-    )
-    price_per_hour: Mapped[Numeric] = mapped_column(
-        Numeric(precision=5, scale=2, decimal_return_scale=2), nullable=True, comment="Цена в час"
-    )
-    in_service: Mapped[bool] = mapped_column(
-        Boolean,
-        default=False,
-        server_default=expression.false(),
-        nullable=False,
-        comment="Находится ли стол в техническом обслуживании",
+    tables_count = column_property(
+        select(func.count(BilliardTable.id))
+        .where(BilliardTable.billiard_club_id == id)
+        .correlate_except(BilliardTable)
+        .scalar_subquery()
     )
 
-    billibard_club: Mapped[BilliardClub] = relationship(back_populates="billiard_tables")
-    bookings: Mapped[list["BookingTable"]] = relationship(back_populates="billiard_table")
+    @hybrid_property
+    def has_russian(self):
+        return any(table.table_type == TableType.RUSSIAN for table in self.billiard_tables)
+
+    @has_russian.expression
+    def has_russian(self):
+        return (
+            select(func.count(BilliardTable.id) > 0)
+            .where(
+                (BilliardTable.billiard_club_id == self.id)
+                & (BilliardTable.table_type == TableType.RUSSIAN)
+            )
+            .label("has_russian")
+        )
+
+    @hybrid_property
+    def has_pool(self):
+        return any(table.table_type == TableType.POOL for table in self.billiard_tables)
+
+    @has_pool.expression
+    def has_pool(self):
+        return (
+            select(func.count(BilliardTable.id) > 0)
+            .where(
+                (BilliardTable.billiard_club_id == self.id)
+                & (BilliardTable.table_type == TableType.POOL)
+            )
+            .label("has_pool")
+        )
+
+    @hybrid_property
+    def has_snooker(self):
+        return any(table.table_type == TableType.SNOOKER for table in self.billiard_tables)
+
+    @has_snooker.expression
+    def has_snooker(self):
+        return (
+            select(func.count(BilliardTable.id) > 0)
+            .where(
+                (BilliardTable.billiard_club_id == self.id)
+                & (BilliardTable.table_type == TableType.SNOOKER)
+            )
+            .label("has_snooker")
+        )

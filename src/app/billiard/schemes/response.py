@@ -52,6 +52,10 @@ class BilliardClubAllItemScheme(BaseModel):
     photo: str | None
     address: BilliardClubAddressScheme | None
     schedules: list[BilliardClubScheduleScheme]
+    tables_count: int
+    has_russian: bool
+    has_pool: bool
+    has_snooker: bool
     closing_time: time | None = None
     opening_dt: datetime | None = None
 

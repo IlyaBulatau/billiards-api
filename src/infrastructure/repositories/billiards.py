@@ -19,7 +19,11 @@ class BilliarClubRepository(IBilliardClubRepository):
             select(BilliardClub)
             .limit(pagination.limit)
             .offset(pagination.offset)
-            .options(joinedload(BilliardClub.address), selectinload(BilliardClub.schedules)),
+            .options(
+                joinedload(BilliardClub.address),
+                selectinload(BilliardClub.schedules),
+                selectinload(BilliardClub.billiard_tables),
+            ),
         )
         result = await self._async_session.execute(stmt)
 
