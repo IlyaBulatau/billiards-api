@@ -55,6 +55,22 @@
                 {% endif %}
             </div>
         </div>
+        <div class="club-price">
+            {% if club.min_price_for_table is not none and club.min_price_for_table > 0 %}
+            <div class="d-flex align-items-center">
+                <span class="price-value text-success fw-medium">
+                    {{ club.min_price_for_table }} BYN/час
+                </span>
+                <span class="price-label ms-2 small text-muted">
+                    мин. цена
+                </span>
+            </div>
+            {% else %}
+            <span class="text-muted small">
+                Цена не указана
+            </span>
+            {% endif %}
+        </div>
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <span class="badge bg-success">

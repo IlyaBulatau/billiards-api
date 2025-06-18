@@ -10,6 +10,7 @@ from sqlalchemy_utils import EmailType, PhoneNumberType
 
 from core.enums import TableType
 from infrastructure.database.models.base import Base
+from infrastructure.database.models.price_rules import PriceRule
 
 
 if TYPE_CHECKING:
@@ -58,6 +59,11 @@ class BilliardClub(Base):
     photo: Mapped[str] = mapped_column(String, nullable=True)
 
     billiard_tables: Mapped[list["BilliardTable"]] = relationship(back_populates="billibard_club")
+    price_rules: Mapped[list["PriceRule"]] = relationship(
+        back_populates="billibard_club",
+        cascade="all, delete-orphan",
+        order_by="PriceRule.updated_at",
+    )
     schedules: Mapped[list["ClubSchedule"]] = relationship(
         "ClubSchedule",
         back_populates="billiard_club",
@@ -70,6 +76,12 @@ class BilliardClub(Base):
         select(func.count(BilliardTable.id))
         .where(BilliardTable.billiard_club_id == id)
         .correlate_except(BilliardTable)
+        .scalar_subquery()
+    )
+    min_price_for_table = column_property(
+        select(func.min(PriceRule.price_per_hour))
+        .where(PriceRule.billiard_club_id == id)
+        .correlate_except(PriceRule)
         .scalar_subquery()
     )
 
@@ -105,10 +117,14 @@ class BilliardClub(Base):
 
     @hybrid_property
     def has_snooker(self):
+        """Свойство которое будет доступно в модели"""
+
         return any(table.table_type == TableType.SNOOKER for table in self.billiard_tables)
 
     @has_snooker.expression
     def has_snooker(self):
+        """Свойство доступно при фильтрации в ORM"""
+
         return (
             select(func.count(BilliardTable.id) > 0)
             .where(

@@ -56,6 +56,7 @@ class BilliardClubAllItemScheme(BaseModel):
     has_russian: bool
     has_pool: bool
     has_snooker: bool
+    min_price_for_table: float | None
     closing_time: time | None = None
     opening_dt: datetime | None = None
 
