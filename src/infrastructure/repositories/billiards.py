@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import joinedload, selectinload
 
 from core.filters.filter_model import FilterModel
@@ -43,6 +43,13 @@ class BilliarClubRepository(IBilliardClubRepository):
         result = await self._async_session.execute(stmt)
 
         return result.scalar_one_or_none()
+
+    async def count(self) -> int:
+        stmt = select(func.count(BilliardClub.id))
+
+        result = await self._async_session.execute(stmt)
+
+        return result.scalar()
 
     async def create(self, instance: BilliardClub) -> BilliardClub: ...
 

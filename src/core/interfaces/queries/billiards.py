@@ -33,3 +33,13 @@ class IBilliardClubDetailQuery(ABC, Generic[T]):
 
     @abstractmethod
     async def query(self, billiard_club_id: UUID) -> BaseModel | NoReturn: ...
+
+
+class IBilliardClubCountQuery(ABC, Generic[T]):
+    """Получение количества бильярдныз клубов"""
+
+    def __init__(self, billiard_club_repository: IBilliardClubRepository):
+        self._billiard_club_repository = billiard_club_repository
+
+    @abstractmethod
+    async def query(self) -> int: ...

@@ -8,6 +8,9 @@ class IBilliardClubRepository(IRepository[BilliardClub]):
     async def get_by_id(self, billiard_club_id: UUID) -> BilliardClub | None:
         """Получить бильярдный клуб по ID"""
 
+    async def count(self) -> int:
+        """Получить количество бильярдных клубов"""
+
 
 class IBilliardTableRepository(IRepository[BilliardTable]):
     async def get_by_id_with_club_and_schedules(

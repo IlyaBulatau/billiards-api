@@ -39,7 +39,7 @@ class Database(BaseModel):
 class Settings(BaseModel):
     api_version: str
     show_error_details: bool
-    api_default_page_size: int = 100
+    api_default_page_size: int = 9
     api_max_page_size: int = 1000
     database: Database
     s3: S3Storage

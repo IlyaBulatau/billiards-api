@@ -8,9 +8,14 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.billiard.queries.get_club_detail import BilliardClubDetailQuery
 from app.billiard.queries.get_clubs import BilliardClubListQuery
+from app.billiard.queries.get_clubs_count import BilliardClubCountQuery
 from app.booking.commands.reservation_table import ReservationTableCommand
 from core.interfaces.commands.bookings import IReservationTableCommand
-from core.interfaces.queries.billiards import IBilliardClubDetailQuery, IBilliardClubListQuery
+from core.interfaces.queries.billiards import (
+    IBilliardClubCountQuery,
+    IBilliardClubDetailQuery,
+    IBilliardClubListQuery,
+)
 from core.interfaces.repositories import (
     IBilliardClubRepository,
     IBilliardTableRepository,
@@ -59,6 +64,7 @@ def configure_di(container: Container, settings: Settings) -> None:
     # queries
     container.add_transient(IBilliardClubDetailQuery, BilliardClubDetailQuery)
     container.add_transient(IBilliardClubListQuery, BilliardClubListQuery)
+    container.add_transient(IBilliardClubCountQuery, BilliardClubCountQuery)
 
     # commands
     container.add_transient(IReservationTableCommand, ReservationTableCommand)
@@ -77,6 +83,7 @@ def configure_di(container: Container, settings: Settings) -> None:
             "booking_table_repository": IBookingTableRepository,
             "billiard_club_list_query": IBilliardClubListQuery,
             "billiard_club_detail_query": IBilliardClubDetailQuery,
+            "billiard_club_count_query": IBilliardClubCountQuery,
             "reservation_command": IReservationTableCommand,
             "booking_table_is_free_validator": BookingTableIsFreeValidator,
             "club_schedule_available_validator": ClubScheduleAvailableValidator,
