@@ -78,12 +78,20 @@ class BilliardClub(Base):
         .correlate_except(BilliardTable)
         .scalar_subquery()
     )
-    min_price_for_table = column_property(
-        select(func.min(PriceRule.price_per_hour))
-        .where(PriceRule.billiard_club_id == id)
-        .correlate_except(PriceRule)
-        .scalar_subquery()
-    )
+
+    @hybrid_property
+    def min_price_for_table(self):
+        if self.price_rules:
+            return min(rule.price_per_hour for rule in self.price_rules)
+        return None
+
+    @min_price_for_table.expression
+    def min_price_for_table(self):
+        return (
+            select(func.min(PriceRule.price_per_hour))
+            .where(PriceRule.billiard_club_id == self.id)
+            .label("min_price_for_table")
+        )
 
     @hybrid_property
     def has_russian(self):

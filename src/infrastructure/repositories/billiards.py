@@ -23,6 +23,7 @@ class BilliarClubRepository(IBilliardClubRepository):
                 joinedload(BilliardClub.address),
                 selectinload(BilliardClub.schedules),
                 selectinload(BilliardClub.billiard_tables),
+                selectinload(BilliardClub.price_rules),
             ),
         )
         result = await self._async_session.execute(stmt)
@@ -44,8 +45,8 @@ class BilliarClubRepository(IBilliardClubRepository):
 
         return result.scalar_one_or_none()
 
-    async def count(self) -> int:
-        stmt = select(func.count(BilliardClub.id))
+    async def count(self, filters: FilterModel[BilliardClub]) -> int:
+        stmt = orm_filter(filters, select(func.count(BilliardClub.id)))
 
         result = await self._async_session.execute(stmt)
 

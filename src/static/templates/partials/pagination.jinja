@@ -2,10 +2,11 @@
 {% if context.total_count > 9 %}
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
+        {% set query_params = context.filters_query %}
         {% if context.page > 1 %}
         <li class="page-item">
             <a class="page-link" 
-            href="{{context.url}}?page={{context.page-1}}&offset={{(context.page-2)*9}}&limit={{context.limit}}">Назад</a>
+            href="/{{context.url}}?{{query_params}}&page={{context.page-1}}&offset={{(context.page-2)*9}}&limit={{context.limit}}">Назад</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -21,7 +22,7 @@
         {% else %}
         <li class="page-item">
             <a class="page-link" 
-            href="{{context.url}}?page={{page_num}}&offset={{(page_num-1)*9}}&limit={{context.limit}}">.{{ page_num }}</a>
+            href="/{{context.url}}?{{query_params}}&page={{page_num}}&offset={{(page_num-1)*9}}&limit={{context.limit}}">.{{ page_num }}</a>
         </li>
         {% endif %}
         {% endfor %}
@@ -29,7 +30,7 @@
         {% if context.page < ((context.total_count // 9) | round(0, "ceil") | int) + 1 %}
         <li class="page-item">
             <a class="page-link"
-                href="{{context.url}}?page={{context.page+1}}&offset={{(context.page)*9}}&limit={{context.limit}}">Вперед</a>
+                href="/{{context.url}}?{{query_params}}&page={{context.page+1}}&offset={{(context.page)*9}}&limit={{context.limit}}">Вперед</a>
         </li>
         {% else %}
         <li class="page-item disabled">

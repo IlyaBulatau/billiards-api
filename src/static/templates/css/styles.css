@@ -127,3 +127,26 @@ main {
     background-color: #0b5ed7 !important;
     transform: rotate(15deg);
 }
+
+/* Стили для фильтров */
+.card-header.bg-primary {
+    font-weight: 600;
+}
+
+/* Анимация для расширяемых фильтров */
+.collapse {
+    transition: all 0.3s ease;
+}
+
+/* Стили для чекбоксов и селектов */
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .card-body .row>div {
+        margin-bottom: 1rem;
+    }
+}
